@@ -1,0 +1,6 @@
+{
+    "$schema": "https://raw.githubusercontent.com/meepleek/json_schema/refs/tags/v0.11/project-config.schema.json",
+    "category": "gd",
+    "command_config": "rs:bevy",
+    "task_project": "gd.template"
+}
