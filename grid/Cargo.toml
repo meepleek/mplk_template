@@ -8,7 +8,7 @@ bevy.workspace = true
 strum.workspace = true
 derive_more.workspace = true
 tracing.workspace = true
-mplk_transform.workspace = true
+mplk_ecs.workspace = true
 
 [dev-dependencies]
 ansi_term.workspace = true

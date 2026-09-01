@@ -2700,8 +2700,8 @@ dependencies = [
  "bevy_asset_loader",
  "bevy_trauma_shake",
  "getrandom 0.3.4",
+ "mplk_ecs",
  "mplk_ext",
- "mplk_transform",
  "mplk_tween",
  "mplk_utils",
  "pretty_assertions",
@@ -3534,20 +3534,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "mplk_ecs"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "tiny_bail",
+ "tracing",
+]
+
+[[package]]
 name = "mplk_ext"
 version = "0.1.0"
 dependencies = [
  "bevy",
  "rand 0.9.5",
  "tiny_bail",
-]
-
-[[package]]
-name = "mplk_transform"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "tracing",
 ]
 
 [[package]]

@@ -3,11 +3,11 @@ resolver = "3"
 members = ["game"]
 
 [workspace.dependencies]
+mplk_ecs = { path = "./ecs" }
 mplk_ext = { path = "./ext" }
 mplk_tween = { path = "./tween" }
 mplk_utils = { path = "./utils" }
 mplk_grid = { path = "./grid" }
-mplk_transform = { path = "./transform" }
 
 # 2D
 bevy = { version = "0.19", default-features = false, features = [

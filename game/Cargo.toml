@@ -4,10 +4,11 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-mplk_transform.workspace = true
-mplk_tween.workspace = true
-mplk_utils.workspace = true
+mplk_ecs.workspace = true
 mplk_ext.workspace = true
+mplk_utils.workspace = true
+mplk_tween.workspace = true
+# mplk_grid.workspace = true
 
 bevy.workspace = true
 tracing.workspace = true

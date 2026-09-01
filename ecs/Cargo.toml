@@ -1,13 +1,9 @@
 [package]
-name = "mplk_transform"
+name = "mplk_ecs"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
 bevy.workspace = true
+tiny_bail.workspace = true
 tracing.workspace = true
-
-[dev-dependencies]
-
-[lints]
-workspace = true

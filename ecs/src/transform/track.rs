@@ -1,10 +1,15 @@
 use bevy::{ecs::component::Mutable, prelude::*};
+use std::marker::PhantomData;
 
-pub fn plugin<T: Component<Mutability = Mutable> + TrackPosition>(app: &mut App) {
-    app.add_systems(
-        PostUpdate,
-        track_position::<T>.after(TransformSystems::Propagate),
-    );
+#[derive(Default)]
+pub struct TrackPositionPlugin<T: Component<Mutability = Mutable> + TrackPosition>(PhantomData<T>);
+impl<T: Component<Mutability = Mutable> + TrackPosition> Plugin for TrackPositionPlugin<T> {
+    fn build(&self, app: &mut App) {
+        app.add_systems(
+            PostUpdate,
+            track_position::<T>.after(TransformSystems::Propagate),
+        );
+    }
 }
 
 pub trait TrackPosition {

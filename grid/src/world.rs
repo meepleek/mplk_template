@@ -1,6 +1,6 @@
 use crate::{direction::TileDir, prelude::*};
 use bevy::prelude::*;
-use mplk_transform::track::TrackPosition;
+use mplk_ecs::transform::TrackPosition;
 
 pub trait GridSize {
     fn grid_size(&self) -> TileGridSize;
