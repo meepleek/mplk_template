@@ -42,9 +42,7 @@ pub use crate::gameplay::{
         ext::{GridIterExt as _, GridNeighbourExt as _},
         tile::{self, CoordsExt as _, GridTileCoords, TileCoords},
         value_grid::ValueGrid,
-        world::{
-            GridBoundsExt, GridPosition, GridSize, GridTileIdxExt as _, GridTileSize, GridWorldExt,
-        },
+        world::{GridBoundsExt, GridSize, GridTileIdxExt as _, GridTileSize, GridWorldExt},
     },
     input,
     turn::SchedulableExt as _,
@@ -52,6 +50,7 @@ pub use crate::gameplay::{
 pub use crate::screens::Screen;
 pub use crate::theme::palette::*;
 pub use crate::theme::prelude::*;
+pub use crate::transform::TrackPosition;
 
 #[cfg(test)]
 pub(crate) use crate::test_utils::{DebugGridTileColor, TestGridUtils};
