@@ -32,8 +32,9 @@ impl<TGrid: GridSize + GridTileSize + GridPosition> GridWorldExt for TGrid {
     /// transform world position to board space (like screen space but in tiles)
     fn world_to_board(&self, pos: Vec2) -> Vec2 {
         let half_size = self.world_size() / 2.;
-        let x = half_size.x + pos.x;
-        let y = half_size.y - pos.y;
+        let grid_pos = self.grid_position();
+        let x = half_size.x + pos.x - grid_pos.x;
+        let y = half_size.y - pos.y + grid_pos.y;
         Vec2::new(x, y)
     }
 
@@ -141,7 +142,7 @@ mod tests {
     #[test_case((0., 0.), (0., 0.) => Vec2::new(144., 144.))]
     #[test_case((50., 0.), (0., 0.) => Vec2::new(194., 144.))]
     #[test_case((-144., 0.), (0., 0.) => Vec2::new(0., 144.))]
-    #[test_case((-144., 0.), (50., 50.) => Vec2::new(50., 194.))]
+    #[test_case((-144., 0.), (50., 50.) => Vec2::new(-50., 194.))]
     #[traced_test]
     fn world_to_board(world: (f32, f32), position: (f32, f32)) -> Vec2 {
         let grid = TestGrid {
@@ -150,41 +151,55 @@ mod tests {
         grid.world_to_board(world.into())
     }
 
-    #[test_case(-144., 144. => Some(TileCoords::new(0, 0)))]
-    #[test_case(-100., 100. => Some(TileCoords::new(0, 0)))]
-    #[test_case(-96., 96. => Some(TileCoords::new(0, 0)))]
-    #[test_case(-48.1, 48.1 => Some(TileCoords::new(0, 0)))]
-    #[test_case(-48., 48. => Some(TileCoords::new(1, 1)))]
-    #[test_case(0., 0. => Some(TileCoords::new(1, 1)))]
-    #[test_case(48., 0. => Some(TileCoords::new(2, 1)))]
-    #[test_case(95., -95. => Some(TileCoords::new(2, 2)))]
-    #[test_case(143.9, -143.9 => Some(TileCoords::new(2, 2)))]
-    #[test_case(95., 144. => Some(TileCoords::new(2, 0)))]
-    #[test_case(-144., -143.9 => Some(TileCoords::new(0, 2)))]
-    #[test_case(144., 0. => None)]
-    #[test_case(0., -144. => None)]
+    #[test_case((-144., 144.) => Some(TileCoords::new(0, 0)))]
+    #[test_case((-100., 100.) => Some(TileCoords::new(0, 0)))]
+    #[test_case((-96., 96.) => Some(TileCoords::new(0, 0)))]
+    #[test_case((-48.1, 48.1) => Some(TileCoords::new(0, 0)))]
+    #[test_case((-48., 48.) => Some(TileCoords::new(1, 1)))]
+    #[test_case((0., 0.) => Some(TileCoords::new(1, 1)))]
+    #[test_case((48., 0.) => Some(TileCoords::new(2, 1)))]
+    #[test_case((95., -95.) => Some(TileCoords::new(2, 2)))]
+    #[test_case((143.9, -143.9) => Some(TileCoords::new(2, 2)))]
+    #[test_case((95., 144.) => Some(TileCoords::new(2, 0)))]
+    #[test_case((-144., -143.9) => Some(TileCoords::new(0, 2)))]
+    #[test_case((144., 0.) => None)]
+    #[test_case((0., -144.) => None)]
     #[traced_test]
-    fn world_to_tile(world_x: f32, world_y: f32) -> Option<TileCoords> {
-        TestGrid::default().world_to_tile(Vec2::new(world_x, world_y))
+    fn world_to_tile(world: (f32, f32)) -> Option<TileCoords> {
+        TestGrid::default().world_to_tile(world.into())
     }
 
-    #[test_case((0., 0.), (50., 0.) => Some(TileCoords::new(2, 1)))]
+    #[test_case((0., 0.), (0., 0.) => TileCoords::new(1, 1))]
+    #[test_case((0., 0.), (50., 0.) => TileCoords::new(0, 1))]
+    #[test_case((0., 0.), (50., 50.) => TileCoords::new(0, 2))]
     #[traced_test]
-    fn world_to_tile_offcenter(world: (f32, f32), position: (f32, f32)) -> Option<TileCoords> {
+    fn world_to_tile_offcenter(world: (f32, f32), position: (f32, f32)) -> TileCoords {
         let grid = TestGrid {
             position: position.into(),
         };
         grid.world_to_tile(world.into())
+            .expect("invalid world position")
     }
 
-    #[test_case(0, 0 => Some(Vec2::new(-96., 96.)))]
-    #[test_case(1, 1 => Some(Vec2::new(0., 0.)))]
-    #[test_case(2, 2 => Some(Vec2::new(96., -96.)))]
-    #[test_case(3, 0 => None)]
-    #[test_case(0, 3 => None)]
+    #[test_case((0, 0) => Some(Vec2::new(-96., 96.)))]
+    #[test_case((1, 1) => Some(Vec2::new(0., 0.)))]
+    #[test_case((2, 2) => Some(Vec2::new(96., -96.)))]
+    #[test_case((3, 0) => None)]
+    #[test_case((0, 3) => None)]
     #[traced_test]
-    fn tile_to_world(tile_x: i16, tile_y: i16) -> Option<Vec2> {
-        TestGrid::default().tile_to_world(TileCoords::new(tile_x, tile_y))
+    fn tile_to_world(tile: (i16, i16)) -> Option<Vec2> {
+        TestGrid::default().tile_to_world(tile)
+    }
+
+    #[test_case((0, 0), (0., 0.) => Vec2::new(-96., 96.))]
+    #[test_case((0, 0), (50., 0.) => Vec2::new(-46., 96.))]
+    #[test_case((0, 0), (50., 50.) => Vec2::new(-46., 146.))]
+    #[traced_test]
+    fn tile_to_world_offcenter(tile: (i16, i16), position: (f32, f32)) -> Vec2 {
+        let grid = TestGrid {
+            position: position.into(),
+        };
+        grid.tile_to_world(tile).expect("invalid tile")
     }
 
     #[test_case(0, 0)]
@@ -201,31 +216,48 @@ mod tests {
         pretty_assertions::assert_eq!(expected_tile, tile);
     }
 
-    #[test_case(-144., 144. => None)]
-    #[test_case(-100., 100. => Some(TileCoords::new(0, 0)))]
-    #[test_case(-96., 96. => Some(TileCoords::new(0, 0)))]
-    #[test_case(-48.1, 48.1 => None)]
-    #[test_case(-48., 48. => None)]
-    #[test_case(0., 0. => Some(TileCoords::new(1, 1)))]
-    #[test_case(48., 0. => None)]
-    #[test_case(95., -95. => Some(TileCoords::new(2, 2)))]
-    #[test_case(143.9, -143.9 => None)]
-    #[test_case(95., 144. => None)]
-    #[test_case(-144., -143.9 => None)]
-    #[test_case(144., 0. => None)]
-    #[test_case(0., -144. => None)]
+    #[test_case((-144., 144.) => None)]
+    #[test_case((-100., 100.) => Some(TileCoords::new(0, 0)))]
+    #[test_case((-96., 96.) => Some(TileCoords::new(0, 0)))]
+    #[test_case((-48.1, 48.1) => None)]
+    #[test_case((-48., 48.) => None)]
+    #[test_case((0., 0.) => Some(TileCoords::new(1, 1)))]
+    #[test_case((48., 0.) => None)]
+    #[test_case((95., -95.) => Some(TileCoords::new(2, 2)))]
+    #[test_case((143.9, -143.9) => None)]
+    #[test_case((95., 144.) => None)]
+    #[test_case((-144., -143.9) => None)]
+    #[test_case((144., 0.) => None)]
+    #[test_case((0., -144.) => None)]
     #[traced_test]
-    fn world_to_tile_center(world_x: f32, world_y: f32) -> Option<TileCoords> {
-        TestGrid::default().world_to_tile_center(Vec2::new(world_x, world_y))
+    fn world_to_tile_center(world: (f32, f32)) -> Option<TileCoords> {
+        TestGrid::default().world_to_tile_center(world.into())
     }
 
-    #[test_case(0, 0)]
-    #[test_case(1, 1)]
-    #[test_case(2, 2)]
+    #[test_case((0., 0.), (0., 0.) => TileCoords::new(1, 1))]
+    #[test_case((0., 0.), (96., 0.) => TileCoords::new(0, 1))]
+    #[test_case((0., 0.), (96., 96.) => TileCoords::new(0, 2))]
     #[traced_test]
-    fn tile_to_world_to_tile_center(tile_x: i16, tile_y: i16) {
-        let expected_tile = TileCoords::new(tile_x, tile_y);
-        let grid = TestGrid::default();
+    fn world_to_tile_center_offcenter(world: (f32, f32), grid_position: (f32, f32)) -> TileCoords {
+        let grid = TestGrid {
+            position: grid_position.into(),
+        };
+        grid.world_to_tile_center(world.into())
+            .expect("invalid world position")
+    }
+
+    #[test_case((0, 0), (0., 0.))]
+    #[test_case((1, 1), (0., 0.))]
+    #[test_case((2, 2), (0., 0.))]
+    #[test_case((1, 1), (50., 0.))]
+    #[test_case((1, 1), (0., 50.))]
+    #[test_case((1, 1), (50., 50.))]
+    #[traced_test]
+    fn tile_to_world_to_tile_center(tile: (i16, i16), grid_position: (f32, f32)) {
+        let grid = TestGrid {
+            position: grid_position.into(),
+        };
+        let expected_tile: TileCoords = tile.into();
         let world_pos = grid.tile_to_world(expected_tile).expect("valid world pos");
         let center = grid.world_to_tile_center(world_pos).expect("valid center");
         pretty_assertions::assert_eq!(expected_tile, center);
