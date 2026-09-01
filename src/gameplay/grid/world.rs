@@ -14,9 +14,6 @@ pub trait GridBoundsExt {
 pub trait GridTileIdxExt {
     fn tile_to_idx(&self, tile: impl Into<TileCoords>) -> Option<usize>;
 }
-pub trait GridPosition {
-    fn grid_position(&self) -> Vec2;
-}
 pub trait GridWorldExt {
     fn world_size(&self) -> Vec2;
     fn world_to_tile(&self, pos: Vec2) -> Option<TileCoords>;
@@ -24,7 +21,7 @@ pub trait GridWorldExt {
     fn world_to_tile_center(&self, pos: Vec2) -> Option<TileCoords>;
     fn tile_to_world(&self, tile: impl Into<TileCoords>) -> Option<Vec2>;
 }
-impl<TGrid: GridSize + GridTileSize + GridPosition> GridWorldExt for TGrid {
+impl<TGrid: GridSize + GridTileSize + TrackPosition> GridWorldExt for TGrid {
     fn world_size(&self) -> Vec2 {
         self.grid_size().as_vec2() * self.tile_size() as f32
     }
@@ -32,7 +29,7 @@ impl<TGrid: GridSize + GridTileSize + GridPosition> GridWorldExt for TGrid {
     /// transform world position to board space (like screen space but in tiles)
     fn world_to_board(&self, pos: Vec2) -> Vec2 {
         let half_size = self.world_size() / 2.;
-        let grid_pos = self.grid_position();
+        let grid_pos = self.position();
         let x = half_size.x + pos.x - grid_pos.x;
         let y = half_size.y - pos.y + grid_pos.y;
         Vec2::new(x, y)
@@ -69,7 +66,7 @@ impl<TGrid: GridSize + GridTileSize + GridPosition> GridWorldExt for TGrid {
         let tile_world = tile.as_vec2() * self.tile_size() as f32;
         let x = tile_world.x + half_tile - half_size.x;
         let y = -tile_world.y - half_tile + half_size.y;
-        Some(Vec2::new(x, y) + self.grid_position())
+        Some(Vec2::new(x, y) + self.position())
     }
 }
 
@@ -120,9 +117,13 @@ mod tests {
             TestGridUtils::TILE_SIZE
         }
     }
-    impl GridPosition for TestGrid {
-        fn grid_position(&self) -> Vec2 {
+    impl TrackPosition for TestGrid {
+        fn position(&self) -> Vec2 {
             self.position
+        }
+
+        fn set_position(&mut self, position: Vec2) {
+            self.position = position
         }
     }
 

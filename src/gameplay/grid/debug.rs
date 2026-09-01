@@ -24,7 +24,7 @@ impl<TGrid, TValue: Send + Sync> DebugGridColor<TGrid, TValue> {
 }
 
 pub struct DebugGridPlugin<
-    TGrid: GridSize + GridTileSize + GridPosition + GridStorage<TValue> + DebugGridValue<TValue>,
+    TGrid: GridSize + GridTileSize + TrackPosition + GridStorage<TValue> + DebugGridValue<TValue>,
     TValue = (),
 > {
     color: Color,
@@ -35,7 +35,7 @@ impl<
     TGrid: Component
         + GridSize
         + GridTileSize
-        + GridPosition
+        + TrackPosition
         + GridStorage<TValue>
         + DebugGridValue<TValue>,
     TValue: Send + Sync + 'static,
@@ -53,7 +53,7 @@ impl<
     TGrid: Component
         + GridSize
         + GridTileSize
-        + GridPosition
+        + TrackPosition
         + GridStorage<TValue>
         + DebugGridValue<TValue>,
     TValue: Send + Sync + 'static,
@@ -97,7 +97,7 @@ impl<
     TGrid: Component
         + GridSize
         + GridTileSize
-        + GridPosition
+        + TrackPosition
         + GridStorage<TValue>
         + DebugGridValue<TValue>,
     TValue: Send + Sync + 'static,
