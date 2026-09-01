@@ -3,6 +3,9 @@ resolver = "3"
 members = ["game"]
 
 [workspace.dependencies]
+mplk_ext = { path = "./ext" }
+mplk_tween = { path = "./tween" }
+mplk_utils = { path = "./utils" }
 mplk_grid = { path = "./grid" }
 mplk_transform = { path = "./transform" }
 
@@ -24,9 +27,6 @@ tracing = { version = "0.1", features = [
   "max_level_debug",
   "release_max_level_warn",
 ] }
-mplk_tween = { git = "https://github.com/meepleek/mplk_bevy_toolkit.git", tag = "v0.19.0" }
-mplk_ext = { git = "https://github.com/meepleek/mplk_bevy_toolkit.git", tag = "v0.19.0" }
-mplk_utils = { git = "https://github.com/meepleek/mplk_bevy_toolkit.git", tag = "v0.19.0" }
 bevy_asset_loader = { version = "0.27.0", features = ["2d"] }
 itertools = "0.14.0"
 bevy_trauma_shake = { git = "https://github.com/meepleek/bevy_trauma_shake", version = "0.8.0" }
