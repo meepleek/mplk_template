@@ -13,12 +13,9 @@ mod menus;
 mod prelude;
 mod screens;
 mod theme;
-pub mod transform;
 
 #[cfg(feature = "dev")]
 mod dev_tools;
-#[cfg(test)]
-pub(crate) mod test_utils;
 
 fn main() -> AppExit {
     App::new().add_plugins(AppPlugin).run()

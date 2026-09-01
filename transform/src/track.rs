@@ -1,5 +1,4 @@
-use crate::prelude::*;
-use bevy::ecs::component::Mutable;
+use bevy::{ecs::component::Mutable, prelude::*};
 
 pub fn plugin<T: Component<Mutability = Mutable> + TrackPosition>(app: &mut App) {
     app.add_systems(

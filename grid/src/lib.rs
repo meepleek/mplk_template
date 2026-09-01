@@ -6,11 +6,13 @@ pub mod debug;
 pub mod direction;
 pub mod error;
 pub mod ext;
+pub mod prelude;
 pub mod tile;
 pub mod value_grid;
 pub mod world;
 
-pub(super) fn plugin(_app: &mut App) {}
+#[cfg(test)]
+pub mod test_utils;
 
 pub type TileGridSize = U16Vec2;
 

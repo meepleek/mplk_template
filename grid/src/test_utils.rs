@@ -1,5 +1,3 @@
-use crate::prelude::*;
-
 #[cfg(test)]
 use ansi_term::Color;
 
@@ -45,14 +43,4 @@ impl TestGridUtils {
     .####.
     ......
     ";
-
-    #[expect(unused)]
-    pub fn rng_from_seed(seed: u64) -> impl Rng {
-        StdRng::seed_from_u64(seed)
-    }
-
-    #[expect(unused)]
-    pub fn seeded_rng() -> impl Rng {
-        Self::rng_from_seed(42)
-    }
 }

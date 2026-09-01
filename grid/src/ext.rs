@@ -1,13 +1,10 @@
 #[cfg(test)]
-use super::GridStorage;
+use crate::GridStorage;
 use crate::{
-    gameplay::grid::{
-        direction::*,
-        tile::{EMPTY_TILE_CHAR, OCCUPIED_TILE_CHAR, TileIterator},
-    },
+    direction::{DIRS_CW, DIRS_DIAG_CW, DIRS_ORTHO_CW, NeighbourDirection},
     prelude::*,
+    tile::{EMPTY_TILE_CHAR, OCCUPIED_TILE_CHAR, TileIterator},
 };
-
 use std::str::FromStr;
 
 pub trait GridIterExt {

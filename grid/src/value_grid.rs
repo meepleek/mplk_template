@@ -1,5 +1,4 @@
-use crate::gameplay::grid::{GridStorage, error::PlaceError};
-use crate::prelude::*;
+use crate::{GridStorage, error::PlaceError, prelude::*};
 use bevy::platform::collections::HashMap;
 
 pub struct ValueGrid<TValue = ()> {
@@ -79,7 +78,7 @@ impl<TValue> GridStorage<TValue> for ValueGrid<TValue> {
 mod tests {
     use test_case::test_case;
 
-    use crate::gameplay::grid::ext::ParsedGrid;
+    use crate::ext::ParsedGrid;
 
     use super::*;
 

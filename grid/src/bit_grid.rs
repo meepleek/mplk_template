@@ -1,5 +1,5 @@
-use crate::gameplay::grid::{GridStorage, error::PlaceError};
-use crate::prelude::*;
+use crate::{GridStorage, error::PlaceError, prelude::*};
+use bevy::prelude::*;
 use std::ops;
 
 #[derive(Debug, Clone, Copy, Deref, DerefMut, Default)]
@@ -166,7 +166,7 @@ impl GridStorage<()> for BitGrid {
 mod tests {
     use test_case::test_case;
 
-    use crate::gameplay::grid::ext::ParsedGrid;
+    use crate::ext::ParsedGrid;
 
     use super::*;
 
