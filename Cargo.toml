@@ -35,6 +35,7 @@ ansi_term = "0.12.1"
 test-case = "3.3.1"
 pretty_assertions = "1.4.1"
 tracing-test = "0.2.6"
+clap = { version = "4.6.6", features = ["env", "derive"] }
 
 [workspace.lints.clippy]
 # Bevy supplies arguments to systems via dependency injection, so it's natural for systems to

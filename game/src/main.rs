@@ -4,10 +4,14 @@
 #![cfg_attr(not(feature = "dev"), windows_subsystem = "windows")]
 
 use bevy::{asset::AssetMetaCheck, prelude::*};
+use clap::Parser;
+
+use crate::{cli::Cli, screens::Screen};
 
 mod anim;
 mod assets;
 mod audio;
+mod cli;
 pub mod gameplay;
 mod menus;
 mod prelude;
@@ -25,6 +29,8 @@ pub struct AppPlugin;
 
 impl Plugin for AppPlugin {
     fn build(&self, app: &mut App) {
+        let cli = Cli::parse();
+
         // Add Bevy plugins.
         app.add_plugins(
             DefaultPlugins
@@ -57,7 +63,7 @@ impl Plugin for AppPlugin {
             menus::plugin,
             screens::plugin,
             theme::plugin,
-            assets::plugin,
+            assets::plugin(cli.screen.unwrap_or(Screen::Gameplay)),
         ));
 
         app.configure_sets(

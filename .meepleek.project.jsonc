@@ -1,6 +1,34 @@
 {
     "$schema": "https://raw.githubusercontent.com/meepleek/json_schema/refs/tags/v0.11/project-config.schema.json",
     "category": "gd",
-    "command_config": "rs:bevy",
+    "command_config": {
+        "status_pane": [
+            "rs:test",
+            "rs:clippy"
+        ],
+        "commands": [
+            {
+                "label": "run Game",
+                "auto_close": false,
+                "cmd": "bevy run -- --screen gameplay"
+            },
+            {
+                "label": "run Main Menu",
+                "auto_close": false,
+                "cmd": "bevy run -- --screen main-menu"
+            },
+            {
+                "label": "run Tutorial",
+                "auto_close": false,
+                "cmd": "bevy run -- --screen tutorial"
+            },
+            {
+                "label": "run Splash",
+                "auto_close": false,
+                "cmd": "bevy run -- --screen splash"
+            },
+            "rs:bevy:run-dx-hot"
+        ]
+    },
     "task_project": "gd.template"
 }
