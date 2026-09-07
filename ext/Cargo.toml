@@ -7,3 +7,6 @@ edition = "2024"
 bevy.workspace = true
 tiny_bail.workspace = true
 rand.workspace = true
+
+[lints]
+workspace = true
