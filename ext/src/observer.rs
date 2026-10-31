@@ -3,15 +3,15 @@ use bevy::ecs::system::IntoObserverSystem;
 use bevy::prelude::*;
 
 pub trait EntityCommandsObserverExt {
-    fn observe_with_relationship<R: Relationship, E: Event, B: Bundle, M>(
+    fn observe_with_relationship<R: Relationship, E: Event, M>(
         &mut self,
-        observer: impl IntoObserverSystem<E, B, M>,
+        observer: impl IntoObserverSystem<E, M>,
     ) -> &mut Self;
 }
 impl EntityCommandsObserverExt for EntityCommands<'_> {
-    fn observe_with_relationship<R: Relationship, E: Event, B: Bundle, M>(
+    fn observe_with_relationship<R: Relationship, E: Event, M>(
         &mut self,
-        observer: impl IntoObserverSystem<E, B, M>,
+        observer: impl IntoObserverSystem<E, M>,
     ) -> &mut Self {
         let e = self.id();
         let observer = Observer::new(observer).with_entity(e);

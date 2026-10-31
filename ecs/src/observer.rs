@@ -1,4 +1,4 @@
-use bevy::ecs::system::SystemParam;
+use bevy::ecs::{event::PropagateEntityTrigger, system::SystemParam};
 use bevy::prelude::*;
 use tiny_bail::{or_continue, or_return_quiet};
 
@@ -20,26 +20,26 @@ impl<'w, 's> Observers<'w, 's> {
 }
 
 pub fn insert_default_on_event<E: EntityEvent, B: Bundle, C: Component + Default>(
-    trig: On<E, B>,
+    trig: On<E>,
     mut cmd: Commands,
 ) {
     let e = trig.event_target();
     or_return_quiet!(cmd.get_entity(e)).try_insert(C::default());
 }
 
-pub fn remove_on_event<E: EntityEvent, B: Bundle, C: Component>(trig: On<E, B>, mut cmd: Commands) {
+pub fn remove_on_event<E: EntityEvent, B: Bundle, C: Component>(trig: On<E>, mut cmd: Commands) {
     or_return_quiet!(cmd.get_entity(trig.event_target())).try_remove::<C>();
 }
 
 pub fn remove_on_add<TAddComponent: Component, TBundleToRemove: Bundle>(
-    trig: On<Add, TAddComponent>,
+    trig: On<Add<TAddComponent>>,
     mut cmd: Commands,
 ) {
     or_return_quiet!(cmd.get_entity(trig.event_target())).try_remove::<TBundleToRemove>();
 }
 
 pub fn ensure_single_at_most<C: Component>(
-    trig: On<Add, C>,
+    trig: On<Add<C>>,
     mut cmd: Commands,
     query: Query<Entity, With<C>>,
 ) {
@@ -59,19 +59,21 @@ pub fn map_event<'t, TSourceEv: EntityEvent, TTargetEv: EntityEvent<Trigger<'t>:
 }
 
 pub fn map_pointer_event<
-    TPointerEv: std::fmt::Debug + Clone + Reflect,
+    TPointerEv: PointerEvent,
     TTargetEv: EntityEvent<Trigger<'static>: Default>,
 >(
     target_fn: impl Fn(Entity, &TPointerEv) -> TTargetEv,
-) -> impl FnMut(On<Pointer<TPointerEv>>, Commands) {
+) -> impl FnMut(On<TPointerEv>, Commands) {
     move |ev, mut cmd| {
         tiny_bail::or_return!(cmd.get_entity(ev.event_target()))
             .trigger(|e| target_fn(e, ev.event()));
     }
 }
 
-pub fn stop_pointer_event_propagation<TEv: std::fmt::Debug + Clone + Reflect>(
-    mut ev: On<Pointer<TEv>>,
-) {
+pub fn stop_pointer_event_propagation<TPointerEv>(mut ev: On<TPointerEv>)
+where
+    TPointerEv: PointerEvent
+        + for<'a> Event<Trigger<'a> = PropagateEntityTrigger<true, TPointerEv, PointerTraversal>>,
+{
     ev.propagate(false);
 }

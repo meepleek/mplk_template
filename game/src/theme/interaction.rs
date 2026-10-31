@@ -19,7 +19,7 @@ pub struct InteractionPalette {
 }
 
 fn apply_interaction_palette_on_click(
-    click: On<Pointer<Click>>,
+    click: On<PointerClick>,
     mut palette_query: Query<(&InteractionPalette, &mut BackgroundColor)>,
 ) {
     let Ok((palette, mut bg)) = palette_query.get_mut(click.event_target()) else {
@@ -30,7 +30,7 @@ fn apply_interaction_palette_on_click(
 }
 
 fn apply_interaction_palette_on_release(
-    click: On<Pointer<Release>>,
+    click: On<PointerRelease>,
     mut palette_query: Query<(&InteractionPalette, &mut BackgroundColor)>,
 ) {
     let Ok((palette, mut bg)) = palette_query.get_mut(click.event_target()) else {
@@ -41,7 +41,7 @@ fn apply_interaction_palette_on_release(
 }
 
 fn apply_interaction_palette_on_over(
-    over: On<Pointer<Over>>,
+    over: On<PointerOver>,
     mut palette_query: Query<(&InteractionPalette, &mut BackgroundColor)>,
 ) {
     let Ok((palette, mut bg)) = palette_query.get_mut(over.event_target()) else {
@@ -52,7 +52,7 @@ fn apply_interaction_palette_on_over(
 }
 
 fn apply_interaction_palette_on_out(
-    out: On<Pointer<Out>>,
+    out: On<PointerOut>,
     mut palette_query: Query<(&InteractionPalette, &mut BackgroundColor)>,
 ) {
     let Ok((palette, mut bg)) = palette_query.get_mut(out.event_target()) else {

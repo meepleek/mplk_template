@@ -38,6 +38,10 @@ dev = [
   "bevy/bevy_ui_debug",
   # Improve error messages coming from Bevy
   "bevy/track_location",
+
+  # bug - devtools need bevy_pbr
+  # https://github.com/bevyengine/bevy/issues/25980
+  "bevy/bevy_pbr",
 ]
 dev_native = [
   "dev",
