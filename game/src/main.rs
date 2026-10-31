@@ -39,11 +39,14 @@ impl Plugin for AppPlugin {
                     // This causes errors and even panics on web build on itch.
                     // See https://github.com/bevyengine/bevy_github_ci_template/issues/48.
                     meta_check: AssetMetaCheck::Never,
+                    file_path: "../assets".to_string(),
+                    // todo: better handling for embedded asset paths
+                    unapproved_path_mode: bevy::asset::UnapprovedPathMode::Allow,
                     ..default()
                 })
                 .set(WindowPlugin {
                     primary_window: Window {
-                        title: "factriss".to_string(),
+                        title: "mplk_game".to_string(),
                         fit_canvas_to_parent: true,
                         ..default()
                     }
@@ -63,7 +66,7 @@ impl Plugin for AppPlugin {
             menus::plugin,
             screens::plugin,
             theme::plugin,
-            assets::plugin(cli.screen.unwrap_or(Screen::Gameplay)),
+            assets::plugin(cli.screen.unwrap_or(Screen::MainMenu)),
         ));
 
         app.configure_sets(

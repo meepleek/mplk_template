@@ -125,7 +125,7 @@ impl TweenBuilder {
         }
     }
 
-    fn on_insert(ev: On<Insert, TweenBuilder>, mut cmd: Commands, mut e_mut_q: Query<EntityMut>) {
+    fn on_insert(ev: On<Insert<TweenBuilder>>, mut cmd: Commands, mut e_mut_q: Query<EntityMut>) {
         let e = ev.event_target();
         let Ok(e_mut) = e_mut_q.get_mut(e) else {
             // todo: tracing
@@ -149,7 +149,7 @@ impl TweenBuilder {
     }
 
     fn on_delay_removed(
-        ev: On<Remove, TweenBuilderDelay>,
+        ev: On<Remove<TweenBuilderDelay>>,
         mut cmd: Commands,
         mut e_mut_q: Query<EntityMut>,
     ) {

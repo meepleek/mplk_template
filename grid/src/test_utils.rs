@@ -1,5 +1,5 @@
 #[cfg(test)]
-use ansi_term::Color;
+use nu_ansi_term::Color;
 
 #[cfg(test)]
 pub enum DebugGridTileColor {
@@ -21,7 +21,7 @@ impl DebugGridTileColor {
         self.style().prefix().to_string()
     }
 
-    fn style(&self) -> ansi_term::Style {
+    fn style(&self) -> nu_ansi_term::Style {
         (match self {
             DebugGridTileColor::Header => Color::RGB(170, 170, 170),
             DebugGridTileColor::White => Color::RGB(255, 255, 255),

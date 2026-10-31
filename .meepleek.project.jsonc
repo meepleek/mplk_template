@@ -10,24 +10,33 @@
             {
                 "label": "run Game",
                 "auto_close": false,
+                "cmd": "dx serve --hot-patch --features bevy/hotpatching --package game --args=\"--screen gameplay\""
+            },
+            {
+                "label": "run Game without hotpatching",
+                "auto_close": false,
                 "cmd": "bevy run -- --screen gameplay"
             },
             {
                 "label": "run Main Menu",
                 "auto_close": false,
-                "cmd": "bevy run -- --screen main-menu"
+                "cmd": "dx serve --hot-patch --features bevy/hotpatching --package game --args=\"--screen main-menu\""
             },
             {
                 "label": "run Tutorial",
                 "auto_close": false,
-                "cmd": "bevy run -- --screen tutorial"
+                "cmd": "dx serve --hot-patch --features bevy/hotpatching --package game --args=\"--screen tutorial\""
             },
             {
                 "label": "run Splash",
                 "auto_close": false,
-                "cmd": "bevy run -- --screen splash"
+                "cmd": "dx serve --hot-patch --features bevy/hotpatching --package game --args=\"--screen splash\""
             },
-            "rs:bevy:run-dx-hot"
+            {
+                "label": "run web",
+                "auto_close": false,
+                "cmd": "bevy run web"
+            }
         ]
     },
     "task_project": "gd.template"

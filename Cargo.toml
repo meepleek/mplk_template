@@ -10,11 +10,10 @@ mplk_utils = { path = "./utils" }
 mplk_grid = { path = "./grid" }
 
 # 2D
-bevy = { version = "0.19", default-features = false, features = [
+bevy = { version = "0.20", default-features = false, features = [
   "2d",
   "ui",
   "audio",
-  "dev",
 ] }
 derive_more = { version = "2.1.1", features = ["std", "error", "display"] }
 pathfinding = "4.15.0"
@@ -27,15 +26,20 @@ tracing = { version = "0.1", features = [
   "max_level_debug",
   "release_max_level_warn",
 ] }
-bevy_asset_loader = { version = "0.27.0", features = ["2d"] }
-itertools = "0.14.0"
-bevy_trauma_shake = { git = "https://github.com/meepleek/bevy_trauma_shake", version = "0.8.0" }
+bevy_asset_loader = { version = "0.28.0", features = [
+  "2d",
+  "progress_tracking",
+] }
+itertools = "0.15.0"
+# bevy_trauma_shake = "0.9.0"
+# this version added public getter & setter for trauma
+bevy_trauma_shake = { git = "https://github.com/johanhelsing/bevy_trauma_shake", revision = "95ca0c92226250248715be7eb1e5c662f6bcf958" }
 strum = { version = "0.28.0", features = ["derive"] }
-ansi_term = "0.12.1"
-test-case = "3.3.1"
-pretty_assertions = "1.4.1"
+nu-ansi-term = "0.50.3"
+test-case = "3.4"
+pretty_assertions = "1.4"
 tracing-test = "0.2.6"
-clap = { version = "4.6.6", features = ["env", "derive"] }
+clap = { version = "4.6", features = ["env", "derive"] }
 
 [workspace.lints.clippy]
 # Bevy supplies arguments to systems via dependency injection, so it's natural for systems to
