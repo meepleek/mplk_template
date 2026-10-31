@@ -14,11 +14,10 @@ bevy = { version = "0.20", default-features = false, features = [
   "2d",
   "ui",
   "audio",
-  "dev",
 ] }
 derive_more = { version = "2.1.1", features = ["std", "error", "display"] }
 pathfinding = "4.15.0"
-rand = "0.10"
+rand = "0.9"
 tiny_bail = "0.7.0"
 # Compile out low-severity logs to improve performance.
 # Remove these features if you want to profile your game with tracy.
