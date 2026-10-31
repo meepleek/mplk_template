@@ -39,6 +39,7 @@ impl Plugin for AppPlugin {
                     // This causes errors and even panics on web build on itch.
                     // See https://github.com/bevyengine/bevy_github_ci_template/issues/48.
                     meta_check: AssetMetaCheck::Never,
+                    file_path: "../assets".to_string(),
                     ..default()
                 })
                 .set(WindowPlugin {
