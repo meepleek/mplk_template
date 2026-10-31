@@ -1,6 +1,5 @@
-//! A splash screen that plays briefly at startup.
-
 use bevy::{
+    asset::{embedded_asset, load_embedded_asset},
     image::{ImageLoaderSettings, ImageSampler},
     input::common_conditions::input_just_pressed,
     prelude::*,
@@ -41,6 +40,9 @@ pub(super) fn plugin(app: &mut App) {
         enter_gameplay_screen
             .run_if(input_just_pressed(KeyCode::Escape).and_then(in_state(Screen::Splash))),
     );
+
+    // embedded imgs
+    embedded_asset!(app, "../../../assets/splash/bevy.png");
 }
 
 const SPLASH_BACKGROUND_COLOR: Color = Color::srgb(0.157, 0.157, 0.157);
@@ -48,6 +50,16 @@ const SPLASH_DURATION_SECS: f32 = 1.8;
 const SPLASH_FADE_DURATION_SECS: f32 = 0.6;
 
 fn spawn_splash_screen(mut commands: Commands, asset_server: Res<AssetServer>) {
+    let ass = asset_server.into_inner();
+    let splash_bevy = load_embedded_asset!(
+        ass,
+        "../../../assets/splash/bevy.png",
+        |settings: &mut ImageLoaderSettings| {
+            // `ImagePlugin::default_nearest()` is used for pixel art.
+            settings.sampler = ImageSampler::linear();
+        }
+    );
+
     commands.spawn((
         widget::ui_root("Splash Screen"),
         BackgroundColor(SPLASH_BACKGROUND_COLOR),
@@ -59,16 +71,7 @@ fn spawn_splash_screen(mut commands: Commands, asset_server: Res<AssetServer>) {
                 width: percent(70),
                 ..default()
             },
-            ImageNode::new(
-                // todo: use embedded asset for splash instead?
-                asset_server
-                    .load_builder()
-                    .with_settings(|settings: &mut ImageLoaderSettings| {
-                        // `ImagePlugin::default_nearest()` is used for pixel art.
-                        settings.sampler = ImageSampler::linear();
-                    })
-                    .load("images/splash.png",)
-            ),
+            ImageNode::new(splash_bevy),
             ImageNodeFadeInOut {
                 total_duration: SPLASH_DURATION_SECS,
                 fade_duration: SPLASH_FADE_DURATION_SECS,

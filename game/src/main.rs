@@ -40,6 +40,8 @@ impl Plugin for AppPlugin {
                     // See https://github.com/bevyengine/bevy_github_ci_template/issues/48.
                     meta_check: AssetMetaCheck::Never,
                     file_path: "../assets".to_string(),
+                    // todo: better handling for embedded asset paths
+                    unapproved_path_mode: bevy::asset::UnapprovedPathMode::Allow,
                     ..default()
                 })
                 .set(WindowPlugin {
