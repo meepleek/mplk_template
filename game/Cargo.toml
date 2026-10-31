@@ -18,6 +18,7 @@ rand.workspace = true
 strum.workspace = true
 tiny_bail.workspace = true
 clap.workspace = true
+iyes_progress = "0.18.0"
 
 [dev-dependencies]
 pretty_assertions.workspace = true

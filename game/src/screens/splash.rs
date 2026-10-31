@@ -4,8 +4,9 @@ use bevy::{
     input::common_conditions::input_just_pressed,
     prelude::*,
 };
+use iyes_progress::ProgressTracker;
 
-use crate::{UpdateSystems, screens::Screen, theme::prelude::*};
+use crate::{UpdateSystems, assets::InitialScreen, screens::Screen, theme::prelude::*};
 
 pub(super) fn plugin(app: &mut App) {
     // Spawn splash screen.
@@ -29,16 +30,9 @@ pub(super) fn plugin(app: &mut App) {
         Update,
         (
             tick_splash_timer.in_set(UpdateSystems::TickTimers),
-            check_splash_timer.in_set(UpdateSystems::Last),
+            check_progress.in_set(UpdateSystems::Last),
         )
             .run_if(in_state(Screen::Splash)),
-    );
-
-    // Exit the splash screen early if the player hits escape.
-    app.add_systems(
-        Update,
-        enter_gameplay_screen
-            .run_if(input_just_pressed(KeyCode::Escape).and_then(in_state(Screen::Splash))),
     );
 
     // embedded imgs
@@ -49,7 +43,15 @@ const SPLASH_BACKGROUND_COLOR: Color = Color::srgb(0.157, 0.157, 0.157);
 const SPLASH_DURATION_SECS: f32 = 1.8;
 const SPLASH_FADE_DURATION_SECS: f32 = 0.6;
 
-fn spawn_splash_screen(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn spawn_splash_screen(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    initial_screen: Res<InitialScreen>,
+) {
+    if !initial_screen.show_splash {
+        return;
+    }
+
     let ass = asset_server.into_inner();
     let splash_bevy = load_embedded_asset!(
         ass,
@@ -137,12 +139,16 @@ fn tick_splash_timer(time: Res<Time>, mut timer: ResMut<SplashTimer>) {
     timer.0.tick(time.delta());
 }
 
-fn check_splash_timer(timer: ResMut<SplashTimer>, mut next_screen: ResMut<NextState<Screen>>) {
-    if timer.0.just_finished() {
-        next_screen.set(Screen::Gameplay);
-    }
-}
+fn check_progress(
+    timer: ResMut<SplashTimer>,
+    mut next_screen: ResMut<NextState<Screen>>,
+    initial_screen: Res<InitialScreen>,
+    progress: Res<ProgressTracker<Screen>>,
+) {
+    let splash_done = timer.0.just_finished() || !initial_screen.show_splash;
+    let assets_loaded = progress.is_ready();
 
-fn enter_gameplay_screen(mut next_screen: ResMut<NextState<Screen>>) {
-    next_screen.set(Screen::Gameplay);
+    if splash_done && assets_loaded {
+        next_screen.set(initial_screen.initial);
+    }
 }

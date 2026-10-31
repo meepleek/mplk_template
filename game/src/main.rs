@@ -46,7 +46,7 @@ impl Plugin for AppPlugin {
                 })
                 .set(WindowPlugin {
                     primary_window: Window {
-                        title: "factriss".to_string(),
+                        title: "mplk_game".to_string(),
                         fit_canvas_to_parent: true,
                         ..default()
                     }
@@ -66,7 +66,7 @@ impl Plugin for AppPlugin {
             menus::plugin,
             screens::plugin,
             theme::plugin,
-            assets::plugin(cli.screen.unwrap_or(Screen::Gameplay)),
+            assets::plugin(cli.screen.unwrap_or(Screen::MainMenu)),
         ));
 
         app.configure_sets(
